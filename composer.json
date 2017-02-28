@@ -1,0 +1,25 @@
+{
+    "name": "eznio/xget",
+    "description": "XPATH-based site parsing library",
+    "license": "MIT",
+    "keywords": [
+        "xpath",
+        "parser"
+    ],
+    "homepage": "https://github.com/eznio/xget",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "eznio/ar": "*",
+        "guzzlehttp/guzzle": "^6.2",
+        "stil/xpath-selector": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "eznio\\xget\\": "src"
+        }
+    }
+}
