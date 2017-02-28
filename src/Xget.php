@@ -22,6 +22,9 @@ class Xget
     /** @var string */
     protected $url;
 
+    /** @var self|null */
+    protected static $instance = null;
+
     public function __construct(Client $httpClient)
     {
         $this->httpClient = $httpClient;
@@ -157,5 +160,16 @@ class Xget
     {
         $xs = Selector::loadHTML($pageBody);
         return $xs->findAll($selector);
+    }
+
+    /**
+     * @return Xget|null
+     */
+    public static function getInstance()
+    {
+        if (null === self::$instance) {
+            self::$instance = new Xget(new Client());
+        }
+        return self::$instance;
     }
 }
