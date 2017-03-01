@@ -104,7 +104,11 @@ class Xget
             if (!is_array($item)) {
                 $result[$key] = $this->parseSingleElement($item);
             } else {
-                $result[$key] = $this->parseNestedElements($item);
+                if (null !== Ar::get($item, '@')) {
+                    $result[$key] = $this->parseNestedElements($item);
+                } else {
+                    $result = $this->parseMultipleElements($item, $result);
+                }
             }
         }
         return $result;
@@ -142,6 +146,25 @@ class Xget
 
             foreach ($elementsDescription as $nodeKey => $nodeValue) {
                 $result[$key][$nodeKey] = trim($innerXs->find($nodeValue)->extract());
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param $elementsDescription
+     * @param $result
+     * @return mixed
+     */
+    protected function parseMultipleElements($elementsDescription, $result)
+    {
+        $pageBody = $this->loadPage();
+        $nextResultKey = count($result) > 0 ? max(array_keys($result)) + 1 : 0;
+        foreach ($elementsDescription as $elementKey => $elementDescription) {
+            $resultKey = $nextResultKey;
+            $elements = $this->findRootElements($pageBody, $elementDescription);
+            foreach ($elements as $element) {
+                $result[$resultKey++][$elementKey] = (string) $element;
             }
         }
         return $result;
