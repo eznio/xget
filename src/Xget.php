@@ -107,7 +107,7 @@ class Xget
                 if (null !== Ar::get($item, '@')) {
                     $result[$key] = $this->parseNestedElements($item);
                 } else {
-                    $result = $this->parseMultipleElements($item, $result);
+                    $result[$key] = $this->parseMultipleElements($item, $result);
                 }
             }
         }
