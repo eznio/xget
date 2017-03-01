@@ -22,6 +22,9 @@ class Xget
     /** @var string */
     protected $url;
 
+    /** @var array */
+    protected $httpOptions = [];
+
     /** @var self|null */
     protected static $instance = null;
 
@@ -88,11 +91,13 @@ class Xget
      * @param array $config
      * @return array
      */
-    public function parse($config = [])
+    public function parse($config = [], $httpOptions = [])
     {
         if (count($config) > 0) {
             $this->config = $config;
         }
+
+        $this->httpOptions = $httpOptions;
 
         $result = [];
         foreach ($config as $key => $item) {
@@ -147,7 +152,7 @@ class Xget
      */
     protected function loadPage()
     {
-        $page = $this->httpClient->get($this->url);
+        $page = $this->httpClient->get($this->url, $this->httpOptions);
         return $page->getBody()->getContents();
     }
 
