@@ -116,7 +116,7 @@ class Xget
 
         return Ar::map($elements, function($element) {
             /** @var $element Node */
-            return $element->innerHTML();
+            return trim($element->innerHTML());
         });
     }
 
@@ -136,7 +136,7 @@ class Xget
             $innerXs = Selector::loadHTML('<?xml version="1.0" encoding="UTF-8"?><body>' . $element->innerHTML() . '</body>');
 
             foreach ($elementsDescription as $nodeKey => $nodeValue) {
-                $result[$key][$nodeKey] = $innerXs->find($nodeValue)->extract();
+                $result[$key][$nodeKey] = trim($innerXs->find($nodeValue)->extract());
             }
         }
         return $result;
