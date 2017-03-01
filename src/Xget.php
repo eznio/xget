@@ -163,7 +163,7 @@ class Xget
      */
     public function findRootElements($pageBody, $selector)
     {
-        $xs = Selector::loadHTML($pageBody);
+        $xs = Selector::loadHTML('<?xml version="1.0" encoding="UTF-8"?>' . $pageBody);
         return $xs->findAll($selector);
     }
 
