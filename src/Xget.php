@@ -100,6 +100,11 @@ class Xget
         $this->httpOptions = $httpOptions;
 
         $result = [];
+
+        if (array_key_exists('@', $config)) {
+            return $this->parseNestedElements($config);
+        }
+
         foreach ($config as $key => $item) {
             if (!is_array($item)) {
                 $result[$key] = $this->parseSingleElement($item);
