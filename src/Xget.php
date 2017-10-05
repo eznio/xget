@@ -5,8 +5,10 @@ namespace eznio\xget;
 
 use eznio\ar\Ar;
 use GuzzleHttp\Client;
+use XPathSelector\Exception\NodeNotFoundException;
 use XPathSelector\Selector;
 use XPathSelector\Node;
+use XPathSelector\NodeList;
 
 
 class Xget
@@ -128,7 +130,8 @@ class Xget
         $pageBody = $this->loadPage();
         $elements = $this->findRootElements($pageBody, $itemXpath);
 
-        return Ar::map($elements, function($element) {
+
+        return $elements->map(function($element) {
             /** @var $element Node */
             return trim($element->innerHTML());
         });
@@ -150,7 +153,11 @@ class Xget
             $innerXs = Selector::loadHTML('<?xml version="1.0" encoding="UTF-8"?><body>' . $element->innerHTML() . '</body>');
 
             foreach ($elementsDescription as $nodeKey => $nodeValue) {
-                $result[$key][$nodeKey] = trim($innerXs->find($nodeValue)->extract());
+            	try {
+					$result[$key][$nodeKey] = trim($innerXs->find($nodeValue)->extract());
+				} catch (NodeNotFoundException $e) {
+            		continue;
+				}
             }
         }
         return $result;
@@ -187,7 +194,7 @@ class Xget
     /**
      * @param $pageBody
      * @param $selector
-     * @return array
+     * @return NodeList
      */
     public function findRootElements($pageBody, $selector)
     {
